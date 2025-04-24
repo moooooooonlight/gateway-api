@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+<!-- Header -->
+<header class="bg-white shadow px-6 py-4 flex justify-between items-center">
+    <div class="text-xl font-bold text-gray-800">TeamProject</div>
+    <div class="flex items-center space-x-4">
+        <span class="text-gray-700 text-sm">홍길동 님</span>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="text-sm text-blue-600 hover:underline">로그아웃</button>
+        </form>
+    </div>
+</header>
+
+<!-- Layout -->
+<div class="flex">
+    <!-- Sidebar -->
+    <nav class="w-64 bg-white shadow h-screen p-4 space-y-4">
+        <a href="/projects" class="block text-gray-700 hover:text-blue-600">📁 프로젝트</a>
+        <a href="/tasks" class="block text-gray-700 hover:text-blue-600">✅ 태스크</a>
+        <a href="/tags" class="block text-gray-700 hover:text-blue-600">🏷️ 태그</a>
+        <a href="/milestones" class="block text-gray-700 hover:text-blue-600">📍 마일스톤</a>
+        <a href="/profile" class="block text-gray-700 hover:text-blue-600">👤 내 정보</a>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-6">
+        <h1 class="text-2xl font-bold text-gray-800 mb-4">대시보드</h1>
+
+        <!-- 여기에 각 기능별 화면이 동적으로 표시됩니다 -->
+        <div class="bg-white p-6 rounded-lg shadow">
+            <p class="text-gray-600">여기는 메인 콘텐츠 영역입니다. 예: 내 프로젝트 목록, 진행중인 태스크 등</p>
+        </div>
+    </main>
+</div>
+
+</body>
+</html>
