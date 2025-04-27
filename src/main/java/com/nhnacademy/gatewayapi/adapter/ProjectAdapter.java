@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -53,7 +54,7 @@ public class ProjectAdapter {
      * @param userId
      * @return
      */
-    public ProjectListDTO getProjectList(String userId){
+    public List<Project> getProjectList(String userId){
         String url = UriComponentsBuilder.fromHttpUrl(API_SERVER_ADDRESS + "/")
                 .queryParam("adminId",userId)
                 .toUriString();
@@ -70,7 +71,7 @@ public class ProjectAdapter {
                 ProjectListDTO.class
         );
 
-        return responseEntity.getBody();
+        return responseEntity.getBody().getProjects();
     }
 
 
@@ -81,7 +82,7 @@ public class ProjectAdapter {
      * @return
      */
     public Project getProject(String userId, Long projectId){
-        String url = UriComponentsBuilder.fromHttpUrl(API_SERVER_ADDRESS + "/{projectId}").toUriString();
+        String url = API_SERVER_ADDRESS + "/{projectId}";
         Map<String, Long> pathVariables = Map.of("projectId", projectId);
 
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -90,7 +91,7 @@ public class ProjectAdapter {
 
         ResponseEntity<ProjectDTO> exchange = restTemplate.exchange(
                 url,
-                HttpMethod.POST,
+                HttpMethod.GET,
                 httpEntity,
                 ProjectDTO.class,
                 pathVariables

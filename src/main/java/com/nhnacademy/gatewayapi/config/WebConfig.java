@@ -1,7 +1,6 @@
 package com.nhnacademy.gatewayapi.config;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -9,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/login").setViewName("login"); //추가
-        registry.addViewController("/projects").setViewName("projectRegister"); //추가
+        registry.addViewController("/login").setViewName("login/login"); //추가
+        registry.addViewController("/projects").setViewName("taskApi/projectRegister"); //추가
     }
 }

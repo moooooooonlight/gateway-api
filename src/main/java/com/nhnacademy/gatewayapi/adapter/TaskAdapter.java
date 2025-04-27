@@ -1,0 +1,62 @@
+package com.nhnacademy.gatewayapi.adapter;
+
+import com.nhnacademy.gatewayapi.domain.dto.ResponseDTO;
+import com.nhnacademy.gatewayapi.domain.dto.TaskDTO;
+import com.nhnacademy.gatewayapi.domain.dto.TaskListDTO;
+import com.nhnacademy.gatewayapi.domain.model.Task;
+import com.nhnacademy.gatewayapi.domain.request.CreateTaskRequest;
+import org.springframework.http.*;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.List;
+import java.util.Map;
+
+@Service
+public class TaskAdapter {
+    private String API_SERVER_ADDRESS = "http://localhost:6060";
+    private final RestTemplate restTemplate;
+
+    public TaskAdapter() {
+        this.restTemplate = new RestTemplate();
+        ;
+    }
+
+
+    public List<Task> getTaskList(Long projectId) {
+        String url = String.format("%s/%d/",API_SERVER_ADDRESS,projectId);
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Void> httpEntity = new HttpEntity<>(httpHeaders);
+
+        ResponseEntity<TaskListDTO> responseEntity = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                httpEntity,
+                TaskListDTO.class
+        );
+
+        return responseEntity.getBody().getTasks();
+    }
+
+    public ResponseDTO registerTask(Long projectId, CreateTaskRequest createTaskRequest) {
+        String rawUrl = String.format("%s/%d/", API_SERVER_ADDRESS, projectId);
+        String url = UriComponentsBuilder.fromHttpUrl(rawUrl)
+                .queryParam("userId", createTaskRequest.getUserId())
+                .toUriString();
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<CreateTaskRequest> requestEntity = new HttpEntity<>(createTaskRequest, httpHeaders);
+
+        ResponseEntity<ResponseDTO> response = restTemplate.exchange(
+                url,
+                HttpMethod.POST,
+                requestEntity,
+                ResponseDTO.class
+        );
+        return response.getBody();
+    }
+}

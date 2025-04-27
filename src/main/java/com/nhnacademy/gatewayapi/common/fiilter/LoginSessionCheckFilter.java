@@ -32,6 +32,15 @@ public class LoginSessionCheckFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
+        // 이미 인증된 사용자라면 필터를 그냥 넘김
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof PreAuthenticatedAuthenticationToken)) {
+            log.debug("이미 인증된 사용자: {}", authentication.getName());
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+
         String sessionId = null;
         Cookie[] cookies = request.getCookies();
         for(Cookie cookie : cookies){

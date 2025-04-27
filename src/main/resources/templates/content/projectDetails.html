@@ -1,0 +1,8 @@
+<div th:fragment="content">
+    <h2 class="text-xl font-bold text-gray-800 mb-4">📁 프로젝트 정보</h2>
+    <div class="bg-white p-6 rounded-lg shadow space-y-4">
+        <div><strong>프로젝트 이름:</strong> <span th:text="${project.projectName}"></span></div>
+        <div><strong>상태:</strong> <span th:text="${project.projectStatus}"></span></div>
+        <div><strong>생성일:</strong> <span th:text="${project.createdAt}"></span></div>
+    </div>
+</div>

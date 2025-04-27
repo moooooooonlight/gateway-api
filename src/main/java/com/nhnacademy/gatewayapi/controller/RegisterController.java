@@ -20,7 +20,7 @@ public class RegisterController {
 
     @GetMapping("/register")
     public String signup(){
-        return "register";
+        return "login/register";
     }
 
 
@@ -35,8 +35,8 @@ public class RegisterController {
         ResponseEntity<ResponseDTO> response = accountAdapter.signupUser(createUserRequest);
 
         if(response.getBody().getHttpStatus().is2xxSuccessful()){
-            return "login";
+            return "layout/mainLayout";
         }
-        return "404";
+        return "error/404";
     }
 }
