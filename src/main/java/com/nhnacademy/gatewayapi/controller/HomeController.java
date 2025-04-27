@@ -63,5 +63,26 @@ public class HomeController {
 
         return mav;
     }
+
+    @GetMapping("/home/{projectId}/{taskId}")
+    public ModelAndView taskDetail(@PathVariable long projectId,
+                                   @PathVariable long taskId,
+                                   HttpServletRequest request) {
+        ModelAndView mav = new ModelAndView("layout/mainLayout");
+
+        String userId = (String) request.getSession().getAttribute("userId");
+        List<Project> projectList = projectAdapter.getProjectList(userId);
+        List<Task> taskList = taskAdapter.getTaskList(projectId);
+        Task task = taskAdapter.getTask(projectId, taskId);
+
+        Map<String, Object> model = mav.getModel();
+        model.put("projectList", projectList);
+        model.put("contentTemplate", "content/taskDetails");
+        model.put("projectId", projectId);
+        model.put("task", task);
+        model.put("taskList", taskList);
+
+        return mav;
+    }
 }
 

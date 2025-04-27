@@ -59,4 +59,34 @@ public class TaskAdapter {
         );
         return response.getBody();
     }
+
+
+    public Task getTask(Long projectId, Long taskId) {
+        String url = String.format("%s/%d/%d",API_SERVER_ADDRESS,projectId, taskId);
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Void> httpEntity = new HttpEntity<>(httpHeaders);
+
+        ResponseEntity<TaskDTO> responseEntity = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                httpEntity,
+                TaskDTO.class
+        );
+
+        TaskDTO body = responseEntity.getBody();
+        Task task = new Task(body.getTaskId(),
+                body.getProjectId(),
+                body.getMileStoneId(),
+                body.getTaskName(),
+                body.getCreatorId(),
+                body.getManagerId(),
+                body.getCreatedAt());
+
+        return task;
+    }
+
+
+
 }

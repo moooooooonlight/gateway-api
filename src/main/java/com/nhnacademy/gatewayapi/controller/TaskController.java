@@ -51,15 +51,4 @@ public class TaskController {
         return "error/404";
     }
 
-
-/*    @GetMapping("/{projectId}")
-    public String updateProjectPage(@PathVariable Long projectId,
-                                    HttpServletRequest request,
-                                    Model model) {
-        String userId = request.getSession().getAttribute("userId").toString();
-        Project project = projectAdapter.getProject(userId, projectId);
-        model.addAttribute("project", project);
-
-        return "updateProject";
-    }*/
 }

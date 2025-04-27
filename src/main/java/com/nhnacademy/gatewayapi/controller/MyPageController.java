@@ -21,6 +21,6 @@ public class MyPageController {
 
         User user = userAdapter.getUser(userId);
         model.addAttribute("user",user);
-        return "myPage";
+        return "content/myPage";
     }
 }

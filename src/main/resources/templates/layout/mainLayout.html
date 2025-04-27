@@ -46,7 +46,7 @@
             <div class="flex justify-between items-center mb-2">
                 <h2 class="text-lg font-semibold">📋 Task 목록</h2>
                 <button
-                        th:if="${project != null}"
+                        th:if="${projectId != null}"
                         th:onclick="|location.href='/tasks?projectId=${project.projectId}'|"
                         class="text-white bg-blue-500 hover:bg-blue-600 text-sm px-2 py-1 rounded">
                     + 추가
@@ -56,7 +56,7 @@
                 <th:block th:if="${taskList != null}">
                     <th:block th:each="task : ${taskList}">
                         <li>
-                            <a th:href="@{/projects/{projectId}/tasks/{taskId}(projectId=${selectedProjectId}, taskId=${task.taskId})}"
+                            <a th:href="@{/home/{projectId}/{taskId}(projectId=${projectId}, taskId=${task.taskId})}"
                                th:text="${task.taskName}"
                                class="block text-gray-700 hover:text-blue-600"></a>
                         </li>

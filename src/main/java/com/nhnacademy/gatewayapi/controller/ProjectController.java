@@ -41,7 +41,7 @@ public class ProjectController {
         ResponseDTO response = projectAdapter.registerProject(createProjectRequest);
 
         if(response.getHttpStatus().is2xxSuccessful()){
-            return "redirect:/layout/mainLayout";
+            return "redirect:/";
         }
         log.debug("fail");
         return "error/404";
