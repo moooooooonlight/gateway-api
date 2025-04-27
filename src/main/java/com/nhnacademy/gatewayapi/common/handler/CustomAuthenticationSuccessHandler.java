@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -30,12 +31,14 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         sessionCookie.setHttpOnly(true);
         sessionCookie.setMaxAge(60 * 60);
         sessionCookie.setPath("/");
+        HttpSession session = request.getSession();
 
         response.addCookie(sessionCookie);
         AcademyUser academyUser = (AcademyUser) authentication.getPrincipal();
         sessionRedisTemplate.opsForValue().set(sessionId, academyUser.getUsername());
 
         String id = request.getParameter("id");
+        session.setAttribute("userId",id);
 
         super.onAuthenticationSuccess(request, response, authentication);
     }

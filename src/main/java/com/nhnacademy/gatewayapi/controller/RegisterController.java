@@ -2,7 +2,7 @@ package com.nhnacademy.gatewayapi.controller;
 
 import com.nhnacademy.gatewayapi.adapter.RegisterAdapter;
 import com.nhnacademy.gatewayapi.domain.dto.ResponseDTO;
-import com.nhnacademy.gatewayapi.domain.dto.CreateUserRequest;
+import com.nhnacademy.gatewayapi.domain.request.CreateUserRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;

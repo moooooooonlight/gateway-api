@@ -1,4 +1,4 @@
-package com.nhnacademy.gatewayapi.domain.dto;
+package com.nhnacademy.gatewayapi.domain.request;
 
 import com.nhnacademy.gatewayapi.domain.model.CUD;
 import com.nhnacademy.gatewayapi.domain.model.User;

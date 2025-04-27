@@ -1,7 +1,7 @@
 package com.nhnacademy.gatewayapi.adapter;
 
 import com.nhnacademy.gatewayapi.domain.dto.ResponseDTO;
-import com.nhnacademy.gatewayapi.domain.dto.CreateUserRequest;
+import com.nhnacademy.gatewayapi.domain.request.CreateUserRequest;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;

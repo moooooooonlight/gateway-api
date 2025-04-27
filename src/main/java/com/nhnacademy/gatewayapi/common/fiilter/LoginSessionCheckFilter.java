@@ -9,6 +9,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +19,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Objects;
 
+@Slf4j
 public class LoginSessionCheckFilter extends OncePerRequestFilter {
     private RedisTemplate<String, Object> redisTemplate;
     private UserAdapter userAdapter;
@@ -49,6 +51,8 @@ public class LoginSessionCheckFilter extends OncePerRequestFilter {
                 Authentication auth = new PreAuthenticatedAuthenticationToken(academyUser, null, academyUser.getAuthorities());
                 auth.setAuthenticated(true);
                 // context 에 사용자 인증 정보 저장해줌
+                log.debug("login 유지 설정");
+                request.getSession().setAttribute("userId",id);
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
         }

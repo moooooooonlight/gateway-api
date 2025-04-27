@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>내 정보</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+<!-- Header -->
+<header class="bg-white shadow px-6 py-4 flex justify-between items-center">
+    <div class="text-xl font-bold text-gray-800">TeamProject</div>
+    <div class="flex items-center space-x-4">
+        <span class="text-gray-700 text-sm">홍길동 님</span>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="text-sm text-blue-600 hover:underline">로그아웃</button>
+        </form>
+    </div>
+</header>
+
+<!-- Layout -->
+<div class="flex">
+    <!-- Sidebar -->
+    <nav class="w-64 bg-white shadow h-screen p-4 space-y-4">
+        <a href="/projects" class="block text-gray-700 hover:text-blue-600">📁 프로젝트</a>
+        <a href="/tasks" class="block text-gray-700 hover:text-blue-600">✅ 태스크</a>
+        <a href="/tags" class="block text-gray-700 hover:text-blue-600">🏷️ 태그</a>
+        <a href="/milestones" class="block text-gray-700 hover:text-blue-600">📍 마일스톤</a>
+        <a href="/myPage" class="block text-gray-700 hover:text-blue-600">👤 내 정보</a>
+    </nav>
+
+    <main class="flex-1 p-6">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">내 정보</h1>
+
+        <div class="bg-white p-6 rounded-lg shadow space-y-4">
+            <div>
+                <label class="block text-sm text-gray-600">아이디</label>
+                <p class="text-gray-800 font-medium" th:text="${user.userId}">sampleId</p>
+            </div>
+            <div>
+                <label class="block text-sm text-gray-600">이메일</label>
+                <p class="text-gray-800 font-medium" th:text="${user.userEmail}">sample@email.com</p>
+            </div>
+            <div>
+                <label class="block text-sm text-gray-600">이름</label>
+                <p class="text-gray-800 font-medium" th:text="${user.userName}">홍길동</p>
+            </div>
+            <div>
+                <label class="block text-sm text-gray-600">비밀번호</label>
+                <p class="text-gray-500 italic">보안을 위해 표시하지 않습니다</p>
+            </div>
+
+            <!-- 상태 관리 영역 -->
+            <div class="space-y-2">
+                <label for="userCud" class="block text-sm text-gray-600">회원 상태</label>
+                <input type="text" id="userCud" name="userCud"
+                       th:value="${user.userCud}"
+                       readonly
+                       class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-700" />
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    function toggleProjectMenu() {
+        const menu = document.getElementById("projectSubMenu");
+        menu.classList.toggle("hidden");
+    }
+</script>
+
+</body>
+</html>
