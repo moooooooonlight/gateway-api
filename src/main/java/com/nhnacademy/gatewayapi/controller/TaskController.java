@@ -25,8 +25,8 @@ public class TaskController {
 
     private final TaskAdapter taskAdapter;
 
-    @GetMapping
-    public ModelAndView registerProjectPage(@RequestParam String projectId,
+    @GetMapping("/{projectId}")
+    public ModelAndView registerProjectPage(@PathVariable String projectId,
                                             HttpServletRequest request){
         ModelAndView mav = new ModelAndView("taskApi/taskRegister");
         Map<String, Object> model = mav.getModel();
@@ -38,8 +38,8 @@ public class TaskController {
         return mav;
     }
 
-    @PostMapping
-    public String registerTask(@RequestParam long projectId,
+    @PostMapping("/{projectId}")
+    public String registerTask(@PathVariable long projectId,
                                   @RequestParam String userId,
                                   @RequestParam String taskName) {
         CreateTaskRequest createTaskRequest = new CreateTaskRequest(taskName, userId, userId);

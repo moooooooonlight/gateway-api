@@ -32,7 +32,7 @@
     </div>
 
     <!-- 댓글 작성 Form -->
-    <form th:action="@{/projects/{projectId}/tasks/{taskId}/comments(projectId=${projectId}, taskId=${task.taskId})}" method="post" class="mt-6 space-y-3">
+    <form th:action="@{/comments/{projectId}/{taskId}(projectId=${projectId}, taskId=${task.taskId})}" method="post" class="mt-6 space-y-3">
         <textarea name="content" rows="3" class="w-full border rounded p-2 focus:outline-none focus:ring focus:border-blue-300" placeholder="댓글을 입력하세요..." required></textarea>
         <div class="text-right">
             <button type="submit" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded">댓글 작성</button>

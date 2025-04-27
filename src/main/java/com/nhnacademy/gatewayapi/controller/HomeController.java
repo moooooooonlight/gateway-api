@@ -1,11 +1,13 @@
 package com.nhnacademy.gatewayapi.controller;
 
+import com.nhnacademy.gatewayapi.adapter.CommentAdapter;
 import com.nhnacademy.gatewayapi.adapter.ProjectAdapter;
 import com.nhnacademy.gatewayapi.adapter.RegisterAdapter;
 import com.nhnacademy.gatewayapi.adapter.TaskAdapter;
 import com.nhnacademy.gatewayapi.domain.dto.ProjectDTO;
 import com.nhnacademy.gatewayapi.domain.dto.ProjectListDTO;
 import com.nhnacademy.gatewayapi.domain.dto.TaskListDTO;
+import com.nhnacademy.gatewayapi.domain.model.Comment;
 import com.nhnacademy.gatewayapi.domain.model.Project;
 import com.nhnacademy.gatewayapi.domain.model.Task;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,6 +30,7 @@ import java.util.Map;
 public class HomeController {
     private final ProjectAdapter projectAdapter;
     private final TaskAdapter taskAdapter;
+    private final CommentAdapter commentAdapter;
 
 
     @GetMapping({"/"})
@@ -74,13 +77,17 @@ public class HomeController {
         List<Project> projectList = projectAdapter.getProjectList(userId);
         List<Task> taskList = taskAdapter.getTaskList(projectId);
         Task task = taskAdapter.getTask(projectId, taskId);
+        Project project = projectAdapter.getProject(userId, projectId);
+        List<Comment> commentList = commentAdapter.getCommentList(projectId, taskId);
 
         Map<String, Object> model = mav.getModel();
         model.put("projectList", projectList);
         model.put("contentTemplate", "content/taskDetails");
         model.put("projectId", projectId);
+        model.put("project", project);
         model.put("task", task);
         model.put("taskList", taskList);
+        model.put("commentList", commentList);
 
         return mav;
     }

@@ -46,8 +46,8 @@
             <div class="flex justify-between items-center mb-2">
                 <h2 class="text-lg font-semibold">📋 Task 목록</h2>
                 <button
-                        th:if="${projectId != null}"
-                        th:onclick="|location.href='/tasks?projectId=${project.projectId}'|"
+                        th:if="${project != null}"
+                        th:onclick="|location.href='/tasks/${project.projectId}'|"
                         class="text-white bg-blue-500 hover:bg-blue-600 text-sm px-2 py-1 rounded">
                     + 추가
                 </button>
