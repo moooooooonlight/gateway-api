@@ -1,5 +1,6 @@
 package com.nhnacademy.gatewayapi.domain.dto;
-import com.nhnacademy.gatewayapi.domain.model.Task;
+
+import com.nhnacademy.gatewayapi.domain.model.Tag;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class TaskListDTO {
-    private List<Task> tasks;
+public class TagListDTO {
+    List<Tag> tags;
 }

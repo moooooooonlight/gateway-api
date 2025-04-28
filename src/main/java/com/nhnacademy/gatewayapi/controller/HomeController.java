@@ -1,17 +1,13 @@
 package com.nhnacademy.gatewayapi.controller;
 
-import com.nhnacademy.gatewayapi.adapter.CommentAdapter;
-import com.nhnacademy.gatewayapi.adapter.ProjectAdapter;
-import com.nhnacademy.gatewayapi.adapter.RegisterAdapter;
-import com.nhnacademy.gatewayapi.adapter.TaskAdapter;
+import com.nhnacademy.gatewayapi.adapter.*;
 import com.nhnacademy.gatewayapi.domain.dto.ProjectDTO;
 import com.nhnacademy.gatewayapi.domain.dto.ProjectListDTO;
 import com.nhnacademy.gatewayapi.domain.dto.TaskListDTO;
-import com.nhnacademy.gatewayapi.domain.model.Comment;
-import com.nhnacademy.gatewayapi.domain.model.Project;
-import com.nhnacademy.gatewayapi.domain.model.Task;
+import com.nhnacademy.gatewayapi.domain.model.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -25,12 +21,15 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @RequiredArgsConstructor
 @Controller
 public class HomeController {
     private final ProjectAdapter projectAdapter;
     private final TaskAdapter taskAdapter;
     private final CommentAdapter commentAdapter;
+    private final TagAdapter tagAdapter;
+    private final MileStoneAdapter mileStoneAdapter;
 
 
     @GetMapping({"/"})
@@ -56,6 +55,8 @@ public class HomeController {
         List<Project> projectList = projectAdapter.getProjectList(userId);
         Project project = projectAdapter.getProject(userId, projectId);
         List<Task> taskList = taskAdapter.getTaskList(projectId);
+        List<Tag> projectTagList = tagAdapter.getProjectTagList(projectId);
+        List<MileStone> projectMilestoneList = mileStoneAdapter.getProjectMilestoneList(projectId);
 
         Map<String, Object> model = mav.getModel();
         model.put("projectList", projectList);
@@ -63,6 +64,13 @@ public class HomeController {
         model.put("project", project);
         model.put("projectId", projectId);
         model.put("taskList", taskList);
+        model.put("tagList", projectTagList);
+        if(projectMilestoneList!=null){
+            log.debug("mileStoneSize", projectMilestoneList.size());
+        }else{
+            log.debug("sss");
+        }
+        model.put("milestoneList", projectMilestoneList);
 
         return mav;
     }
@@ -79,6 +87,10 @@ public class HomeController {
         Task task = taskAdapter.getTask(projectId, taskId);
         Project project = projectAdapter.getProject(userId, projectId);
         List<Comment> commentList = commentAdapter.getCommentList(projectId, taskId);
+        List<Tag> taskTagList = tagAdapter.getTaskTagList(projectId, taskId);
+        List<Tag> projectTagList = tagAdapter.getProjectTagList(projectId);
+        List<MileStone> projectMilestoneList = mileStoneAdapter.getProjectMilestoneList(projectId);
+        MileStone mileStone = mileStoneAdapter.getTaskMileStone(projectId, taskId);
 
         Map<String, Object> model = mav.getModel();
         model.put("projectList", projectList);
@@ -88,6 +100,10 @@ public class HomeController {
         model.put("task", task);
         model.put("taskList", taskList);
         model.put("commentList", commentList);
+        log.debug("tagListSize={}",taskTagList.size());
+        model.put("projectTagList", projectTagList);
+        model.put("taskTagList", taskTagList);
+        model.put("milestoneList", projectMilestoneList);
 
         return mav;
     }

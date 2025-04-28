@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 public class Task {
     private Long taskId;
     private Long projectId;
-    private Long mileStoneId;
+    private Long milestoneId;
     private String taskName;
     private String creatorId;
     private String managerId;
@@ -20,7 +20,7 @@ public class Task {
 
     public Task(Long projectId, Long mileStoneId, String taskName, String creatorId, String managerId, LocalDateTime createdAt) {
         this.projectId = projectId;
-        this.mileStoneId = mileStoneId;
+        this.milestoneId = mileStoneId;
         this.taskName = taskName;
         this.creatorId = creatorId;
         this.managerId = managerId;

@@ -1,5 +1,7 @@
 package com.nhnacademy.gatewayapi.domain.dto;
-import com.nhnacademy.gatewayapi.domain.model.Task;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.nhnacademy.gatewayapi.domain.model.MileStone;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class TaskListDTO {
-    private List<Task> tasks;
+public class MileStoneListDTO {
+    List<MileStone> milestones;
 }

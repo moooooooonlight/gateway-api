@@ -5,11 +5,13 @@ import com.nhnacademy.gatewayapi.domain.model.User;
 import jakarta.annotation.security.DenyAll;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
-@Getter
 @AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class UserResponseDTO {
     private String userId;
 
