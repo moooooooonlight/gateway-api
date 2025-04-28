@@ -25,6 +25,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFIlterChain(HttpSecurity http) throws Exception{
         http.csrf(AbstractHttpConfigurer::disable); // CSRF 보호 기능을 끄기 설정
+        http.logout(AbstractHttpConfigurer::disable);
+
 
         // 필터 적용
         http.addFilterBefore(new LoginSessionCheckFilter(redisTemplate, userAdapter), UsernamePasswordAuthenticationFilter.class);
@@ -48,6 +50,7 @@ public class SecurityConfig {
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/login/process").permitAll()
                         .requestMatchers("/register").permitAll()
+                        .requestMatchers("/404").permitAll()
                         .anyRequest().authenticated()
         );
 

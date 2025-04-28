@@ -1,7 +1,7 @@
-<div th:fragment="content">
+<div th:fragment="content" class="flex">
 
     <!-- 왼쪽: 프로젝트 기본 정보 -->
-    <div class="w-1/2">
+    <div class="w-1/2 pr-4">
         <h2 class="text-xl font-bold text-gray-800 mb-4">📁 프로젝트 정보</h2>
         <div class="bg-white p-6 rounded-lg shadow space-y-4">
             <div><strong>프로젝트 이름:</strong> <span th:text="${project.projectName}"></span></div>
@@ -10,36 +10,23 @@
         </div>
     </div>
 
-    <!-- 오른쪽: 태그 및 마일스톤 관리 -->
+    <!-- 오른쪽: 태그, 마일스톤, 멤버 관리 -->
     <div class="w-1/2 space-y-8">
 
         <div class="flex space-x-2 mb-4">
             <button onclick="toggleSection('tagSection')" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded">태그 관리</button>
             <button onclick="toggleSection('milestoneSection')" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded">마일스톤 관리</button>
+            <button onclick="toggleSection('memberSection')" class="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded">멤버 관리</button>
         </div>
 
         <!-- 태그 관리 -->
         <div id="tagSection" class="hidden bg-white p-6 rounded-lg shadow space-y-4">
-            <!-- (네가 올려준 태그 관리 코드) -->
-        </div>
-
-        <!-- 마일스톤 관리 -->
-        <div id="milestoneSection" class="hidden bg-white p-6 rounded-lg shadow space-y-4">
-            <!-- (네가 올려준 마일스톤 관리 코드) -->
-        </div>
-
-        <!-- 태그 관리 -->
-        <div class="bg-white p-6 rounded-lg shadow space-y-4">
             <h2 class="text-xl font-bold text-gray-800 mb-2">🏷️ 태그 관리</h2>
-
-            <!-- 태그 등록 (내부) -->
             <form th:action="@{/tags/{projectId}(projectId=${project.projectId})}" method="post" class="flex gap-2 mb-4">
                 <input type="text" name="tagName" placeholder="새 태그 입력" required
                        class="flex-1 border rounded p-2 focus:outline-none focus:ring focus:border-blue-300" />
                 <button type="submit" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded">등록</button>
             </form>
-
-            <!-- 태그 리스트 -->
             <div class="space-y-2">
                 <th:block th:if="${tagList != null and !#lists.isEmpty(tagList)}">
                     <th:block th:each="tag : ${tagList}">
@@ -55,23 +42,19 @@
         </div>
 
         <!-- 마일스톤 관리 -->
-        <div class="bg-white p-6 rounded-lg shadow space-y-4">
+        <div id="milestoneSection" class="hidden bg-white p-6 rounded-lg shadow space-y-4">
             <h2 class="text-xl font-bold text-gray-800 mb-2">🗓️ 마일스톤 관리</h2>
-
-            <!-- 새 마일스톤 등록 버튼 -->
             <div class="flex justify-end mb-4">
                 <a th:href="@{/milestones/{projectId}(projectId=${project.projectId})}"
                    class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded">새 마일스톤 등록</a>
             </div>
-
-            <!-- 마일스톤 리스트 -->
             <div class="space-y-2">
                 <th:block th:if="${milestoneList != null and !#lists.isEmpty(milestoneList)}">
                     <th:block th:each="milestone : ${milestoneList}">
                         <div class="flex items-center justify-between p-2 bg-gray-100 rounded">
                             <span th:text="${milestone.milestoneName}">마일스톤명</span>
                             <span class="text-xs text-gray-500" th:text="${#temporals.format(milestone.startDate, 'yyyy-MM-dd')} + ' ~ ' + ${#temporals.format(milestone.endDate, 'yyyy-MM-dd')}">
-                                2025-05-01 ~ 2025-06-01
+                                기간
                             </span>
                         </div>
                     </th:block>
@@ -81,21 +64,46 @@
                 </th:block>
             </div>
         </div>
+
+        <!-- 멤버 관리 -->
+        <div id="memberSection" class="hidden bg-white p-6 rounded-lg shadow space-y-4">
+            <h2 class="text-xl font-bold text-gray-800 mb-2">👥 멤버 관리</h2>
+
+            <!-- 프로젝트에 등록할 멤버 선택 -->
+            <form th:action="@{/projects/{projectId}/members(projectId=${project.projectId})}" method="post" class="space-y-4">
+                <div>
+                    <label class="block mb-1 text-gray-700">멤버 추가</label>
+                    <select name="memberId" required class="w-full p-2 border rounded">
+                        <option value="">멤버 선택</option>
+                        <th:block th:each="user : ${allMemberList}">
+                            <option th:value="${user.userId}" th:text="${user.userName}"></option>
+                        </th:block>
+                    </select>
+                </div>
+                <div class="flex justify-end">
+                    <button type="submit" class="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded">멤버 추가</button>
+                </div>
+            </form>
+
+            <!-- 현재 프로젝트에 등록된 멤버 리스트 -->
+            <div class="mt-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">등록된 멤버</h3>
+                <div class="space-y-2">
+                    <th:block th:if="${projectMemberList != null and !#lists.isEmpty(projectMemberList)}">
+                        <th:block th:each="member : ${projectMemberList}">
+                            <div class="flex items-center justify-between p-2 bg-gray-100 rounded">
+                                <span th:text="${member.userName}">멤버명</span>
+                            </div>
+                        </th:block>
+                    </th:block>
+                    <th:block th:if="${projectMemberList == null or #lists.isEmpty(projectMemberList)}">
+                        <p class="text-gray-400 text-sm">등록된 멤버가 없습니다.</p>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+
     </div>
 
 </div>
 
-<script>
-    function toggleSection(sectionId) {
-        const tagSection = document.getElementById('tagSection');
-        const milestoneSection = document.getElementById('milestoneSection');
-
-        if (sectionId === 'tagSection') {
-            tagSection.classList.toggle('hidden');
-            milestoneSection.classList.add('hidden');
-        } else if (sectionId === 'milestoneSection') {
-            milestoneSection.classList.toggle('hidden');
-            tagSection.classList.add('hidden');
-        }
-    }
-</script>

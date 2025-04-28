@@ -35,7 +35,7 @@ public class RegisterController {
         ResponseEntity<ResponseDTO> response = accountAdapter.signupUser(createUserRequest);
 
         if(response.getBody().getHttpStatus().is2xxSuccessful()){
-            return "layout/mainLayout";
+            return "/login";
         }
         return "error/404";
     }

@@ -8,6 +8,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -17,7 +18,7 @@ import java.util.Objects;
 public class LogoutController {
     private final RedisTemplate<String, Object> redisTemplate;
 
-    @GetMapping("/logout")
+    @PostMapping("/logout")
     public void logout(HttpServletRequest request,
                        HttpServletResponse response) throws IOException {
 
@@ -41,7 +42,6 @@ public class LogoutController {
 
         redisTemplate.delete(sessionId);
         SecurityContextHolder.clearContext();
-        response.sendRedirect("/");
+        response.sendRedirect("/login");
     }
-
 }

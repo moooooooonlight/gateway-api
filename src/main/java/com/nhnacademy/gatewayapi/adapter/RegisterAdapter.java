@@ -17,7 +17,7 @@ public class RegisterAdapter {
 
 
     public ResponseEntity<ResponseDTO> signupUser(CreateUserRequest createUserRequest) {
-        String url = API_SERVER_ADDRESS + "/signup";
+        String url = API_SERVER_ADDRESS + "/login";
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);

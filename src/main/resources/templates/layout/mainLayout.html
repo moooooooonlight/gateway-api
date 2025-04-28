@@ -15,7 +15,7 @@
     </div>
     <div class="flex items-center space-x-4">
         <span class="text-gray-700 text-sm" th:text="${userName}">홍길동 님</span>
-        <form th:action="@{/logout}" method="post">
+        <form action="/logout" method="post">
             <button type="submit" class="text-sm text-blue-600 hover:underline">로그아웃</button>
         </form>
     </div>
@@ -90,3 +90,18 @@
 
 </body>
 </html>
+
+
+<script>
+    function toggleSection(sectionId) {
+        const sections = ['tagSection', 'milestoneSection', 'memberSection'];
+        sections.forEach(id => {
+            const section = document.getElementById(id);
+            if (id === sectionId) {
+                section.classList.toggle('hidden');
+            } else {
+                section.classList.add('hidden');
+            }
+        });
+    }
+</script>

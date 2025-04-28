@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -25,11 +26,13 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Controller
 public class HomeController {
+    private final UserAdapter userAdapter;
     private final ProjectAdapter projectAdapter;
     private final TaskAdapter taskAdapter;
     private final CommentAdapter commentAdapter;
     private final TagAdapter tagAdapter;
     private final MileStoneAdapter mileStoneAdapter;
+    private final ProjectMemberAdapter projectMemberAdapter;
 
 
     @GetMapping({"/"})
@@ -39,6 +42,8 @@ public class HomeController {
         String userId = (String) request.getSession().getAttribute("userId");
         // 프로젝트 리스트값 요청하기
         List<Project> projectList = projectAdapter.getProjectList(userId);
+        // 본인이 속한 List도 필요하다!
+
 
         ModelAndView home = new ModelAndView("layout/mainLayout");
         home.getModel().put("projectList", projectList);
@@ -57,6 +62,9 @@ public class HomeController {
         List<Task> taskList = taskAdapter.getTaskList(projectId);
         List<Tag> projectTagList = tagAdapter.getProjectTagList(projectId);
         List<MileStone> projectMilestoneList = mileStoneAdapter.getProjectMilestoneList(projectId);
+        List<User> users = userAdapter.getUsers();
+        List<User> projectUserList = getProjectUserList(projectId);
+
 
         Map<String, Object> model = mav.getModel();
         model.put("projectList", projectList);
@@ -65,12 +73,10 @@ public class HomeController {
         model.put("projectId", projectId);
         model.put("taskList", taskList);
         model.put("tagList", projectTagList);
-        if(projectMilestoneList!=null){
-            log.debug("mileStoneSize", projectMilestoneList.size());
-        }else{
-            log.debug("sss");
-        }
         model.put("milestoneList", projectMilestoneList);
+        model.put("allMemberList", users);
+        model.put("projectMemberList", projectUserList);
+
 
         return mav;
     }
@@ -106,6 +112,19 @@ public class HomeController {
         model.put("milestoneList", projectMilestoneList);
 
         return mav;
+    }
+
+
+
+
+    private List<User> getProjectUserList(long projectId) {
+        List<String> memberIdList = projectMemberAdapter.getMemberIdList(projectId);
+        List<User> userList = new ArrayList<>();
+        for(String memberId : memberIdList){
+            userList.add(userAdapter.getUser(memberId));
+        }
+
+        return userList;
     }
 }
 

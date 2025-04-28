@@ -1,11 +1,13 @@
 package com.nhnacademy.gatewayapi.adapter;
 
+import com.nhnacademy.gatewayapi.domain.dto.UserListResponseDTO;
 import com.nhnacademy.gatewayapi.domain.dto.UserResponseDTO;
 import com.nhnacademy.gatewayapi.domain.model.User;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -18,11 +20,27 @@ public class UserAdapter {
         this.restTemplate = new RestTemplate();;
     }
 
+    public List<User> getUsers(){
+        String url = String.format("%s/users", API_SERVER_ADDRESS);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Void> httpEntity = new HttpEntity<>(headers);
+
+        ResponseEntity<UserListResponseDTO> response = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                httpEntity,
+                UserListResponseDTO.class
+        );
+
+        return response.getBody().getUserList();
+    }
+
 
 
     public User getUser(String userId){
-        String url = API_SERVER_ADDRESS + "/user/{userId}";
-        Map<String, String> pathVariable = Map.of("userId", userId);
+        String url = String.format("%s/users/%s",API_SERVER_ADDRESS,userId);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -33,8 +51,7 @@ public class UserAdapter {
                 url,
                 HttpMethod.GET,
                 httpEntity,
-                UserResponseDTO.class,
-                pathVariable
+                UserResponseDTO.class
         );
 
         UserResponseDTO userResponseDTO = response.getBody();
@@ -52,7 +69,7 @@ public class UserAdapter {
 
 
     public ResponseEntity<Void> updateUserCUD(String userId, String cud){
-        String url = API_SERVER_ADDRESS + "/user/{userId}" + "?userCUD={userCUD}";
+        String url = API_SERVER_ADDRESS + "/users/{userId}" + "?userCUD={userCUD}";
         Map<String, String> pathVariable = Map.of("userId", userId, "userCUD", cud);
 
 

@@ -40,6 +40,9 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String id = request.getParameter("id");
         session.setAttribute("userId",id);
 
+
+        setDefaultTargetUrl("/");
+
         super.onAuthenticationSuccess(request, response, authentication);
     }
 }

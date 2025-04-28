@@ -1,6 +1,7 @@
 package com.nhnacademy.gatewayapi.controller;
 
 import com.nhnacademy.gatewayapi.adapter.ProjectAdapter;
+import com.nhnacademy.gatewayapi.adapter.ProjectMemberAdapter;
 import com.nhnacademy.gatewayapi.domain.dto.ResponseDTO;
 import com.nhnacademy.gatewayapi.domain.model.Member;
 import com.nhnacademy.gatewayapi.domain.model.Project;
@@ -25,6 +26,7 @@ import java.util.Map;
 public class ProjectController {
 
     private final ProjectAdapter projectAdapter;
+    private final ProjectMemberAdapter projectMemberAdapter;
 
     @GetMapping
     public String registerProjectPage(){
@@ -60,6 +62,28 @@ public class ProjectController {
         return mav;
     }
 
+    @PostMapping("/{projectId}/members")
+    public ModelAndView registerMember(@PathVariable("projectId") Long projectId,
+                                 @RequestParam long memberId) {
+        ModelAndView mav = new ModelAndView(String.format("redirect:/home/%d",projectId));
+
+        ResponseDTO responseDTO = projectMemberAdapter.registerMember(projectId, memberId);
+        if(responseDTO.getHttpStatus().is2xxSuccessful()){
+            return mav;
+        }
+
+        return new ModelAndView("error/404");
+    }
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -84,26 +108,6 @@ public class ProjectController {
             return "redirect:/projects";
         }
         return "projects";
-    }
-
-    @GetMapping("/{projectId}/members")
-    public String registerMemberPage(@PathVariable("projectId") Long projectId,
-                                     HttpServletRequest request,
-                                     Model model) {
-        String userId = request.getSession().getAttribute("userId").toString();
-        Project project = projectAdapter.getProject(userId, projectId);
-        model.addAttribute("project", project);
-
-        return "registerMember";
-    }
-
-    @PostMapping("/{projectId}/members")
-    public String registerMember(@PathVariable("projectId") Long projectId,
-                                 @RequestParam Member member) {
-
-
-        // project에 member 등록
-        return "";
     }
 
     @GetMapping("/users/{userId}")
