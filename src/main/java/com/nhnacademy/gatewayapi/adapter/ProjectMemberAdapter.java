@@ -40,8 +40,8 @@ public class ProjectMemberAdapter {
 
 
 
-    public ResponseDTO registerMember(Long projectId, Long memberId) {
-        String url = String.format("%s/%d/member/%d", API_SERVER_ADDRESS, projectId, memberId);
+    public ResponseDTO registerMember(Long projectId, String memberId) {
+        String url = String.format("%s/%d/member/%s", API_SERVER_ADDRESS, projectId, memberId);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);

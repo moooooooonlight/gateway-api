@@ -66,7 +66,7 @@ public class ProjectController {
     )
     @PostMapping("/{projectId}/members")
     public String registerMember(@PathVariable("projectId") Long projectId,
-                                       @RequestParam long memberId) {
+                                       @RequestParam String memberId) {
 
         ResponseDTO responseDTO = projectMemberAdapter.registerMember(projectId, memberId);
         if (responseDTO.getHttpStatus().is2xxSuccessful()) {
