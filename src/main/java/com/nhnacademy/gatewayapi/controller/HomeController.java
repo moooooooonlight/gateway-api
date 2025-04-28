@@ -42,7 +42,6 @@ public class HomeController {
         String userId = (String) request.getSession().getAttribute("userId");
         // 프로젝트 리스트값 요청하기
         List<Project> projectList = projectAdapter.getProjectList(userId);
-        // 본인이 속한 List도 필요하다!
 
 
         ModelAndView home = new ModelAndView("layout/mainLayout");

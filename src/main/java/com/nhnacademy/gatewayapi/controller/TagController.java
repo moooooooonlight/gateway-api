@@ -5,10 +5,7 @@ import com.nhnacademy.gatewayapi.domain.dto.ResponseDTO;
 import com.nhnacademy.gatewayapi.domain.request.CreateTagRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @Controller
@@ -37,6 +34,17 @@ public class TagController {
 
         if(responseDTO.getHttpStatus().is2xxSuccessful()){
             return String.format("redirect:/home/%d/%d",projectId, taskId);
+        }
+        return "error/404";
+    }
+
+    @DeleteMapping("/{projectId}/{tagId}")
+    public String deleteProjectTag(@PathVariable("projectId") long projectId,
+                                   @PathVariable("tagId") long tagId) {
+        ResponseDTO responseDTO = tagAdapter.deleteProjectTag(projectId, tagId);
+
+        if(responseDTO.getHttpStatus().is2xxSuccessful()) {
+            return String.format("redirect:/home/%d", projectId);
         }
         return "error/404";
     }

@@ -56,4 +56,17 @@ public class MileStoneController {
 
         return new ModelAndView("error/404");
     }
+
+    @DeleteMapping("/{projectId}/{milestoneId}")
+    public String deleteProjectMilestone(@PathVariable long projectId,
+                                         @PathVariable long milestoneId){
+
+        ResponseDTO responseDTO = mileStoneAdapter.deleteProjectMilestone(projectId, milestoneId);
+
+        if(responseDTO.getHttpStatus().is2xxSuccessful()) {
+            return String.format("redirect:/home/%d", projectId);
+        }
+        return "error/404";
+    }
 }
+

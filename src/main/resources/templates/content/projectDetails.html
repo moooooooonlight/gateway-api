@@ -32,6 +32,11 @@
                     <th:block th:each="tag : ${tagList}">
                         <div class="flex items-center justify-between p-2 bg-gray-100 rounded">
                             <span th:text="${tag.tagName}">태그명</span>
+
+                            <form th:action="@{/tags/{projectId}/{tagId}(projectId=${project.projectId}, tagId=${tag.tagId})}" method="post" onsubmit="return confirm('정말 삭제할까요?');">
+                                <input type="hidden" name="_method" value="delete"/>
+                                <button type="submit" class="text-red-500 hover:text-red-700">X</button>
+                            </form>
                         </div>
                     </th:block>
                 </th:block>
@@ -56,6 +61,10 @@
                             <span class="text-xs text-gray-500" th:text="${#temporals.format(milestone.startDate, 'yyyy-MM-dd')} + ' ~ ' + ${#temporals.format(milestone.endDate, 'yyyy-MM-dd')}">
                                 기간
                             </span>
+                            <form th:action="@{/milestones/{projectId}/{milestoneId} (projectId=${project.projectId},milestoneId=${milestone.milestoneId})}" method="post" onsubmit="return confirm('정말 삭제할까요?');">
+                                <input type="hidden" name="_method" value="delete"/>
+                                <button type="submit" class="text-red-500 hover:text-red-700">X</button>
+                            </form>
                         </div>
                     </th:block>
                 </th:block>
