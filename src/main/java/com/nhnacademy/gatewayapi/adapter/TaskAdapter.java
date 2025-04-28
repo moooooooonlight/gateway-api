@@ -89,5 +89,37 @@ public class TaskAdapter {
 
 
 
+    public ResponseDTO updateTask(Long projectId, Long taskId, CreateTaskRequest taskRequest) {
+        String url = String.format("%s/%d/%d",API_SERVER_ADDRESS, projectId,taskId);
 
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<CreateTaskRequest> httpEntity = new HttpEntity<>(taskRequest,httpHeaders);
+
+        ResponseEntity<ResponseDTO> responseEntity = restTemplate.exchange(
+                url,
+                HttpMethod.PUT,
+                httpEntity,
+                ResponseDTO.class
+        );
+
+        return responseEntity.getBody();
+    }
+
+    public ResponseDTO deleteTask(Long projectId, Long taskId) {
+        String url = String.format("%s/%d/%d",API_SERVER_ADDRESS, projectId,taskId);
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Void> httpEntity = new HttpEntity<>(httpHeaders);
+
+        ResponseEntity<ResponseDTO> responseEntity = restTemplate.exchange(
+                url,
+                HttpMethod.DELETE,
+                httpEntity,
+                ResponseDTO.class
+        );
+
+        return responseEntity.getBody();
+    }
 }

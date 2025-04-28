@@ -9,22 +9,24 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @RequiredArgsConstructor
 @Controller
+@RequestMapping("/register")
 public class RegisterController {
     private final RegisterAdapter accountAdapter;
     private final PasswordEncoder passwordEncoder;
 
 
-    @GetMapping("/register")
+    @GetMapping
     public String signup(){
         return "login/register";
     }
 
 
-    @PostMapping("/register")
+    @PostMapping
     public String doSignup(@RequestParam String id,
                            @RequestParam String password,
                            @RequestParam String email,

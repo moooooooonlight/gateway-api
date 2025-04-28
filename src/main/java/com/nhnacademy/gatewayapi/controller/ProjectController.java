@@ -29,7 +29,7 @@ public class ProjectController {
     private final ProjectMemberAdapter projectMemberAdapter;
 
     @GetMapping
-    public String registerProjectPage(){
+    public String registerProjectPage() {
         return "taskApi/projectRegister";
     }
 
@@ -39,83 +39,26 @@ public class ProjectController {
                                   HttpServletRequest request) {
         String userId = (String) request.getSession().getAttribute("userId");
 
-        CreateProjectRequest createProjectRequest = new CreateProjectRequest(projectName, ProjectStatus.valueOf(projectStatus),userId);
+        CreateProjectRequest createProjectRequest = new CreateProjectRequest(projectName, ProjectStatus.valueOf(projectStatus), userId);
         ResponseDTO response = projectAdapter.registerProject(createProjectRequest);
 
-        if(response.getHttpStatus().is2xxSuccessful()){
+        if (response.getHttpStatus().is2xxSuccessful()) {
             return "redirect:/";
         }
         log.debug("fail");
         return "error/404";
     }
 
-    @GetMapping("/{projectId}")
-    public ModelAndView updateProjectPage(@PathVariable Long projectId,
-                                          HttpServletRequest request) {
-        ModelAndView mav = new ModelAndView(String.format("redirect:/home/%d",projectId));
-        Map<String, Object> model = mav.getModel();
-
-        String userId = request.getSession().getAttribute("userId").toString();
-        Project project = projectAdapter.getProject(userId, projectId);
-        model.put("userId", userId);
-        model.put("project", project);
-        return mav;
-    }
-
     @PostMapping("/{projectId}/members")
     public ModelAndView registerMember(@PathVariable("projectId") Long projectId,
-                                 @RequestParam long memberId) {
-        ModelAndView mav = new ModelAndView(String.format("redirect:/home/%d",projectId));
+                                       @RequestParam long memberId) {
+        ModelAndView mav = new ModelAndView(String.format("redirect:/home/%d", projectId));
 
         ResponseDTO responseDTO = projectMemberAdapter.registerMember(projectId, memberId);
-        if(responseDTO.getHttpStatus().is2xxSuccessful()){
+        if (responseDTO.getHttpStatus().is2xxSuccessful()) {
             return mav;
         }
 
         return new ModelAndView("error/404");
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    @PutMapping("/{projectId}")
-    public String updateProject(@PathVariable("projectId") Long projectId,
-                                HttpServletRequest request) {
-        String userId = request.getSession().getAttribute("userId").toString();
-        ResponseEntity<ResponseDTO> response = projectAdapter.updateProject(userId, projectId);
-        if (response.getBody().getHttpStatus().is2xxSuccessful()) {
-            return "redirect:/projects";
-        }
-        return "updateProject";
-    }
-
-    @DeleteMapping("/{projectId}")
-    public String deleteProject(@PathVariable("projectId") Long projectId,
-                                HttpServletRequest request) {
-        String userId = request.getSession().getAttribute("userId").toString();
-        ResponseEntity<ResponseDTO> response = projectAdapter.deleteProject(userId, projectId);
-        if (response.getBody().getHttpStatus().is2xxSuccessful()) {
-            return "redirect:/projects";
-        }
-        return "projects";
-    }
-
-    @GetMapping("/users/{userId}")
-    public String getMyProjects(@PathVariable("userId") String userId) {
-        List<Project> projectList = projectAdapter.getProjectList(userId);
-        if (projectList != null) {
-            return "redirect:/projects";
-        }
-        return "projects";
     }
 }

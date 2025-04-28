@@ -6,6 +6,7 @@ import com.nhnacademy.gatewayapi.domain.dto.ResponseDTO;
 import com.nhnacademy.gatewayapi.domain.request.CreateMileStoneRequest;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -31,8 +32,8 @@ public class MileStoneController {
     @PostMapping("/{projectId}")
     public ModelAndView registerMileStone(@PathVariable long projectId,
                                           @RequestParam String milestoneName,
-                                          @RequestParam LocalDate startDate,
-                                          @RequestParam LocalDate endDate){
+                                          @RequestParam(required = false) LocalDate startDate,
+                                          @RequestParam(required = false) LocalDate endDate) {
         ModelAndView mav = new ModelAndView(String.format("redirect:/home/%d",projectId));
 
         ResponseDTO responseDTO = mileStoneAdapter.saveProjectMilestone(projectId, new CreateMileStoneRequest(milestoneName, startDate, endDate));

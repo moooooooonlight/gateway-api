@@ -55,10 +55,27 @@
             <ul class="space-y-2">
                 <th:block th:if="${taskList != null}">
                     <th:block th:each="task : ${taskList}">
-                        <li>
+                        <li class="flex justify-between items-center">
                             <a th:href="@{/home/{projectId}/{taskId}(projectId=${projectId}, taskId=${task.taskId})}"
                                th:text="${task.taskName}"
                                class="block text-gray-700 hover:text-blue-600"></a>
+                            <div class="flex space-x-1" th:if="${task.managerId} == ${projectOwnerId}">
+                                <!-- ✏️ 수정 버튼 -->
+                                <button th:onclick="|location.href='/tasks/${projectId}/${task.taskId}'|"
+                                        class="text-xs text-white bg-green-500 hover:bg-green-600 px-2 py-1 rounded">
+                                    수정
+                                </button>
+
+                                <!-- 🗑 삭제 버튼 -->
+                                <form th:action="@{/tasks/{projectId}/{taskId}(projectId=${projectId}, taskId=${task.taskId})}" method="post"
+                                      onsubmit="return confirm('정말 삭제하시겠습니까?');">
+                                    <input type="hidden" name="_method" value="delete"/>
+                                    <button type="submit"
+                                            class="text-xs text-white bg-red-500 hover:bg-red-600 px-2 py-1 rounded">
+                                        삭제
+                                    </button>
+                                </form>
+                            </div>
                         </li>
                     </th:block>
                 </th:block>

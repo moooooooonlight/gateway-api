@@ -75,6 +75,7 @@ public class HomeController {
         model.put("milestoneList", projectMilestoneList);
         model.put("allMemberList", users);
         model.put("projectMemberList", projectUserList);
+        model.put("projectOwnerId", userId);
 
 
         return mav;
@@ -109,6 +110,8 @@ public class HomeController {
         model.put("projectTagList", projectTagList);
         model.put("taskTagList", taskTagList);
         model.put("milestoneList", projectMilestoneList);
+        model.put("projectOwnerId", userId);
+
 
         return mav;
     }

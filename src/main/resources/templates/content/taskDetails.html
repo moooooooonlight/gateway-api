@@ -53,12 +53,13 @@
         <form th:action="@{/milestones/{projectId}/{taskId}(projectId=${projectId}, taskId=${task.taskId})}" method="post" class="space-y-2">
             <h2 class="text-lg font-semibold text-gray-800">🗓️ 마일스톤 선택</h2>
 
+            <!-- 마일스톤 선택 -->
             <select name="milestoneId" class="w-full border rounded p-2 focus:outline-none focus:ring focus:border-green-300">
-                <option value="" disabled>마일스톤을 선택하세요</option>
+                <option value="" th:selected="${task.milestoneId == null}" disabled>마일스톤을 선택하세요</option>
                 <th:block th:each="milestone : ${milestoneList}">
                     <option th:value="${milestone.milestoneId}"
                             th:text="${milestone.milestoneName}"
-                            th:selected="${task.milestoneId != null} ? (${milestone.milestoneId} == ${task.milestoneId}) : false">
+                            th:selected="${milestone.milestoneId == task.milestoneId}">
                         마일스톤명
                     </option>
                 </th:block>
@@ -69,7 +70,11 @@
                 <th:block th:if="${selectedMilestoneName != null}">
                     <span class="inline-block bg-green-100 text-green-800 rounded px-2 py-1" th:text="${selectedMilestoneName}">선택된 마일스톤명</span>
                 </th:block>
+                <th:block th:if="${selectedMilestoneName == null}">
+                    <span class="text-gray-400">선택된 마일스톤이 없습니다.</span>
+                </th:block>
             </div>
+
 
             <div class="text-right">
                 <button type="submit" class="mt-2 px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded">마일스톤 등록</button>
