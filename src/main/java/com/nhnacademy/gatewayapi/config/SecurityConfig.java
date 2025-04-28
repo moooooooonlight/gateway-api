@@ -51,11 +51,12 @@ public class SecurityConfig {
                         .requestMatchers("/login/process").permitAll()
                         .requestMatchers("/register").permitAll()
                         .requestMatchers("/404").permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers("/swagger-ui/index.html").permitAll()
+                        .anyRequest().permitAll()
         );
 
-
         // 예외 : exceptionHandler
+
 
 
         return http.build();

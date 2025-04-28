@@ -5,6 +5,7 @@ import com.nhnacademy.gatewayapi.domain.dto.ProjectDTO;
 import com.nhnacademy.gatewayapi.domain.dto.ProjectListDTO;
 import com.nhnacademy.gatewayapi.domain.dto.TaskListDTO;
 import com.nhnacademy.gatewayapi.domain.model.*;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,26 +35,34 @@ public class HomeController {
     private final MileStoneAdapter mileStoneAdapter;
     private final ProjectMemberAdapter projectMemberAdapter;
 
-
+    @Operation(
+            summary = "기본 페이지 API",
+            description = "로그인 성공 시 기본 페이지"
+    )
     @GetMapping({"/"})
-    public ModelAndView home(@AuthenticationPrincipal UserDetails userDetails,
-                             @AuthenticationPrincipal OAuth2User oAuth2User,
-                             HttpServletRequest request) {
+    public String home(@AuthenticationPrincipal UserDetails userDetails,
+                       @AuthenticationPrincipal OAuth2User oAuth2User,
+                       HttpServletRequest request,
+                       Model model) {
+
         String userId = (String) request.getSession().getAttribute("userId");
         // 프로젝트 리스트값 요청하기
         List<Project> projectList = projectAdapter.getProjectList(userId);
+        model.addAttribute("projectList", projectList);
 
 
-        ModelAndView home = new ModelAndView("layout/mainLayout");
-        home.getModel().put("projectList", projectList);
-        return home;
+        return "layout/mainLayout";
     }
 
 
+    @Operation(
+            summary = "프로젝트 페이지 API",
+            description = "프로젝트 선택 시 프로젝트 정보 띄워줌"
+    )
     @GetMapping("/home/{projectId}")
-    public ModelAndView projectDetail(@PathVariable long projectId,
-                                HttpServletRequest request ) {
-        ModelAndView mav = new ModelAndView("layout/mainLayout");
+    public String projectDetail(@PathVariable long projectId,
+                                HttpServletRequest request,
+                                Model model) {
 
         String userId = (String) request.getSession().getAttribute("userId");
         List<Project> projectList = projectAdapter.getProjectList(userId);
@@ -65,27 +74,31 @@ public class HomeController {
         List<User> projectUserList = getProjectUserList(projectId);
 
 
-        Map<String, Object> model = mav.getModel();
-        model.put("projectList", projectList);
-        model.put("contentTemplate", "content/projectDetails");
-        model.put("project", project);
-        model.put("projectId", projectId);
-        model.put("taskList", taskList);
-        model.put("tagList", projectTagList);
-        model.put("milestoneList", projectMilestoneList);
-        model.put("allMemberList", users);
-        model.put("projectMemberList", projectUserList);
-        model.put("projectOwnerId", userId);
+        model.addAttribute("projectList", projectList);
+        model.addAttribute("contentTemplate", "content/projectDetails");
+        model.addAttribute("project", project);
+        model.addAttribute("projectId", projectId);
+        model.addAttribute("taskList", taskList);
+        model.addAttribute("tagList", projectTagList);
+        model.addAttribute("milestoneList", projectMilestoneList);
+        model.addAttribute("allMemberList", users);
+        model.addAttribute("projectMemberList", projectUserList);
+        model.addAttribute("projectOwnerId", userId);
 
 
-        return mav;
+        return "layout/mainLayout";
     }
 
+
+    @Operation(
+            summary = "Task 페이지 API",
+            description = "Task 선택 시 Task 정보 띄워줌"
+    )
     @GetMapping("/home/{projectId}/{taskId}")
-    public ModelAndView taskDetail(@PathVariable long projectId,
-                                   @PathVariable long taskId,
-                                   HttpServletRequest request) {
-        ModelAndView mav = new ModelAndView("layout/mainLayout");
+    public String taskDetail(@PathVariable long projectId,
+                             @PathVariable long taskId,
+                             HttpServletRequest request,
+                             Model model) {
 
         String userId = (String) request.getSession().getAttribute("userId");
         List<Project> projectList = projectAdapter.getProjectList(userId);
@@ -98,22 +111,20 @@ public class HomeController {
         List<MileStone> projectMilestoneList = mileStoneAdapter.getProjectMilestoneList(projectId);
         MileStone mileStone = mileStoneAdapter.getTaskMileStone(projectId, taskId);
 
-        Map<String, Object> model = mav.getModel();
-        model.put("projectList", projectList);
-        model.put("contentTemplate", "content/taskDetails");
-        model.put("projectId", projectId);
-        model.put("project", project);
-        model.put("task", task);
-        model.put("taskList", taskList);
-        model.put("commentList", commentList);
-        log.debug("tagListSize={}",taskTagList.size());
-        model.put("projectTagList", projectTagList);
-        model.put("taskTagList", taskTagList);
-        model.put("milestoneList", projectMilestoneList);
-        model.put("projectOwnerId", userId);
+        model.addAttribute("projectList", projectList);
+        model.addAttribute("contentTemplate", "content/taskDetails");
+        model.addAttribute("projectId", projectId);
+        model.addAttribute("project", project);
+        model.addAttribute("task", task);
+        model.addAttribute("taskList", taskList);
+        model.addAttribute("commentList", commentList);
+        model.addAttribute("projectTagList", projectTagList);
+        model.addAttribute("taskTagList", taskTagList);
+        model.addAttribute("milestoneList", projectMilestoneList);
+        model.addAttribute("projectOwnerId", userId);
 
 
-        return mav;
+        return "layout/mainLayout";
     }
 
 

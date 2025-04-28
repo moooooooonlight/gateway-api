@@ -8,6 +8,7 @@ import com.nhnacademy.gatewayapi.domain.model.ProjectStatus;
 import com.nhnacademy.gatewayapi.domain.model.Task;
 import com.nhnacademy.gatewayapi.domain.request.CreateProjectRequest;
 import com.nhnacademy.gatewayapi.domain.request.CreateTaskRequest;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,19 +27,27 @@ public class TaskController {
 
     private final TaskAdapter taskAdapter;
 
+    @Operation(
+            summary = "Task 등록 페이지 API",
+            description = "Task 등록 페이지 띄워주는 동작 수행"
+    )
     @GetMapping("/{projectId}")
-    public ModelAndView getTaskRegisterPage(@PathVariable String projectId,
-                                            HttpServletRequest request){
-        ModelAndView mav = new ModelAndView("taskApi/taskRegister");
-        Map<String, Object> model = mav.getModel();
+    public String getTaskRegisterPage(@PathVariable String projectId,
+                                      HttpServletRequest request,
+                                      Model model) {
+
 
         String userId = (String) request.getSession().getAttribute("userId");
-        model.put("userId", userId);
-        model.put("projectId", projectId);
+        model.addAttribute("userId", userId);
+        model.addAttribute("projectId", projectId);
 
-        return mav;
+        return "taskApi/taskRegister";
     }
 
+    @Operation(
+            summary = "Task 등록 API",
+            description = "Task 등록 수행"
+    )
     @PostMapping("/{projectId}")
     public String registerTask(@PathVariable long projectId,
                                   @RequestParam String userId,
@@ -52,21 +61,26 @@ public class TaskController {
         return "error/404";
     }
 
-
+    @Operation(
+            summary = "Task 수정 페이지 API",
+            description = "Task 업데이트 페이지 띄워주는 동작 수행"
+    )
     @GetMapping("/{projectId}/{taskId}")
-    public ModelAndView updateTask(@PathVariable long projectId,
-                             @PathVariable long taskId){
+    public String updateTask(@PathVariable long projectId,
+                             @PathVariable long taskId,
+                             Model model){
 
-        ModelAndView mav = new ModelAndView("taskApi/taskUpdateForm");
-
-        Map<String, Object> model = mav.getModel();
         Task task = taskAdapter.getTask(projectId, taskId);
-        model.put("task", task);
+        model.addAttribute("task", task);
 
-        return mav;
+        return "taskApi/taskUpdateForm";
     }
 
 
+    @Operation(
+            summary = "Task 수정 API",
+            description = "Task 업데이트 수행"
+    )
     @PutMapping("/{projectId}/{taskId}")
     public String updateTask(@PathVariable long projectId,
                              @PathVariable long taskId,
@@ -83,6 +97,10 @@ public class TaskController {
     }
 
 
+    @Operation(
+            summary = "Task 삭제 API",
+            description = "Task 삭제 수행"
+    )
     @DeleteMapping("/{projectId}/{taskId}")
     public String deleteTask(@PathVariable long projectId,
                              @PathVariable long taskId){

@@ -1,5 +1,6 @@
 package com.nhnacademy.gatewayapi.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,6 +19,10 @@ import java.util.Objects;
 public class LogoutController {
     private final RedisTemplate<String, Object> redisTemplate;
 
+    @Operation(
+            summary = "로그아웃 API",
+            description = "로그아웃 동작"
+    )
     @PostMapping("/logout")
     public void logout(HttpServletRequest request,
                        HttpServletResponse response) throws IOException {

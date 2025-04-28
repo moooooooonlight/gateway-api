@@ -7,6 +7,7 @@ import com.nhnacademy.gatewayapi.domain.model.Member;
 import com.nhnacademy.gatewayapi.domain.model.Project;
 import com.nhnacademy.gatewayapi.domain.model.ProjectStatus;
 import com.nhnacademy.gatewayapi.domain.request.CreateProjectRequest;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,11 +29,21 @@ public class ProjectController {
     private final ProjectAdapter projectAdapter;
     private final ProjectMemberAdapter projectMemberAdapter;
 
+
+    @Operation(
+            summary = "프로젝트 등록 페이지 API",
+            description = "프로젝트 등록 페이지 띄워주는 동작 수행"
+    )
     @GetMapping
     public String registerProjectPage() {
         return "taskApi/projectRegister";
     }
 
+
+    @Operation(
+            summary = "프로젝트 등록 API",
+            description = "프로젝트 등록 수행"
+    )
     @PostMapping
     public String registerProject(@RequestParam String projectName,
                                   @RequestParam String projectStatus,
@@ -49,16 +60,19 @@ public class ProjectController {
         return "error/404";
     }
 
+    @Operation(
+            summary = "프로젝트에 member 등록 API",
+            description = "프로젝트에 member 등록해주는 동작 수행"
+    )
     @PostMapping("/{projectId}/members")
-    public ModelAndView registerMember(@PathVariable("projectId") Long projectId,
+    public String registerMember(@PathVariable("projectId") Long projectId,
                                        @RequestParam long memberId) {
-        ModelAndView mav = new ModelAndView(String.format("redirect:/home/%d", projectId));
 
         ResponseDTO responseDTO = projectMemberAdapter.registerMember(projectId, memberId);
         if (responseDTO.getHttpStatus().is2xxSuccessful()) {
-            return mav;
+            return String.format("redirect:/home/%d", projectId);
         }
 
-        return new ModelAndView("error/404");
+        return "error/404";
     }
 }

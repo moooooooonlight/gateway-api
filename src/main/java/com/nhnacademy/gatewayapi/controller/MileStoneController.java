@@ -4,10 +4,12 @@ import com.nhnacademy.gatewayapi.adapter.MileStoneAdapter;
 import com.nhnacademy.gatewayapi.adapter.TaskAdapter;
 import com.nhnacademy.gatewayapi.domain.dto.ResponseDTO;
 import com.nhnacademy.gatewayapi.domain.request.CreateMileStoneRequest;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -20,44 +22,59 @@ import java.util.Map;
 public class MileStoneController {
     private final MileStoneAdapter mileStoneAdapter;
 
+    @Operation(
+            summary = "마일스톤 등록 Form API",
+            description = "마일스톤 등록 Form 가져오는 동작 수행"
+    )
     @GetMapping("/{projectId}")
-    public ModelAndView getMileStoneRegisterForm(@PathVariable long projectId){
-        ModelAndView mav = new ModelAndView("taskApi/mileStoneRegister");
-        Map<String, Object> model = mav.getModel();
-        model.put("projectId", projectId);
+    public String getMileStoneRegisterForm(@PathVariable long projectId,
+                                           Model model){
 
-        return mav;
+        model.addAttribute("projectId", projectId);
+
+        return "taskApi/mileStoneRegister";
     }
 
+    @Operation(
+            summary = "프로젝트 마일스톤 등록 API",
+            description = "프로젝트에 마일스톤 등록 수행"
+    )
     @PostMapping("/{projectId}")
-    public ModelAndView registerMileStone(@PathVariable long projectId,
+    public String registerMileStone(@PathVariable long projectId,
                                           @RequestParam String milestoneName,
                                           @RequestParam(required = false) LocalDate startDate,
                                           @RequestParam(required = false) LocalDate endDate) {
-        ModelAndView mav = new ModelAndView(String.format("redirect:/home/%d",projectId));
 
         ResponseDTO responseDTO = mileStoneAdapter.saveProjectMilestone(projectId, new CreateMileStoneRequest(milestoneName, startDate, endDate));
         if (responseDTO.getHttpStatus().is2xxSuccessful()) {
-            return mav;
+            String.format("redirect:/home/%d", projectId);
         }
-        return new ModelAndView("error/404");
+        return "error/404";
     }
 
 
+    @Operation(
+            summary = "Task 마일스톤 등록 API",
+            description = "Task에 마일스톤 등록 수행"
+    )
     @PostMapping("/{projectId}/{taskId}")
-    public ModelAndView registerTaskMilestone(@PathVariable long projectId,
+    public String registerTaskMilestone(@PathVariable long projectId,
                                               @PathVariable long taskId,
                                               @RequestParam long milestoneId){
-        ModelAndView mav = new ModelAndView(String.format("redirect:/home/%d/%d", projectId, taskId));
 
         ResponseDTO responseDTO = mileStoneAdapter.saveTaskMileStone(projectId, taskId, milestoneId);
         if(responseDTO.getHttpStatus().is2xxSuccessful()){
-            return mav;
+            String.format("redirect:/home/%d/%d", projectId, taskId);
         }
 
-        return new ModelAndView("error/404");
+        return "error/404";
     }
 
+
+    @Operation(
+            summary = "Task의 마일스톤 삭제 API",
+            description = "Task의 마일스톤 삭제 수행"
+    )
     @DeleteMapping("/{projectId}/{milestoneId}")
     public String deleteProjectMilestone(@PathVariable long projectId,
                                          @PathVariable long milestoneId){
