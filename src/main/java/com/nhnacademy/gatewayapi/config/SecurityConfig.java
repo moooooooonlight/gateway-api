@@ -52,7 +52,7 @@ public class SecurityConfig {
                         .requestMatchers("/register").permitAll()
                         .requestMatchers("/404").permitAll()
                         .requestMatchers("/swagger-ui/index.html").permitAll()
-                        .anyRequest().permitAll()
+                        .anyRequest().authenticated()
         );
 
         // 예외 : exceptionHandler

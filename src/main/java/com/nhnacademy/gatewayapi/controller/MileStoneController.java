@@ -47,7 +47,7 @@ public class MileStoneController {
 
         ResponseDTO responseDTO = mileStoneAdapter.saveProjectMilestone(projectId, new CreateMileStoneRequest(milestoneName, startDate, endDate));
         if (responseDTO.getHttpStatus().is2xxSuccessful()) {
-            String.format("redirect:/home/%d", projectId);
+            return String.format("redirect:/home/%d", projectId);
         }
         return "error/404";
     }
@@ -64,7 +64,7 @@ public class MileStoneController {
 
         ResponseDTO responseDTO = mileStoneAdapter.saveTaskMileStone(projectId, taskId, milestoneId);
         if(responseDTO.getHttpStatus().is2xxSuccessful()){
-            String.format("redirect:/home/%d/%d", projectId, taskId);
+            return String.format("redirect:/home/%d/%d", projectId, taskId);
         }
 
         return "error/404";
